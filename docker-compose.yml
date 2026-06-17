@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: pjebd
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u ${MYSQL_USER} -p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+      - ./docker/scripts/init/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command:
+      --default-authentication-plugin=caching_sha2_password
+    networks:
+      - network_pje
+
+  flyway:
+    image: flyway/flyway:latest
+    container_name: pje-migration
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+        FLYWAY_URL: ${FLYWAY_URL}
+        FLYWAY_USER: ${FLYWAY_USER}
+        FLYWAY_PASSWORD: ${FLYWAY_PASSWORD}
+        FLYWAY_LOCATIONS: ${FLYWAY_LOCATIONS}
+        FLYWAY_TABLE: ${FLYWAY_TABLE}
+        FLYWAY_BASELINE_ON_MIGRATE: ${FLYWAY_BASELINE_ON_MIGRATE}
+    entrypoint: >
+      bash -c "
+        flyway repair &&
+        flyway migrate
+      "
+    volumes:
+      - ./pje/migration:/flyway/sql/migration
+
+    networks:
+      - network_pje
+
+  
+
+volumes:
+  mysql:
+
+networks:
+  network_pje:
