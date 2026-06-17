@@ -64,7 +64,7 @@ O sistema é baseado em um modelo relacional estruturado com forte integridade r
 | SG_*		        | `CHAR`		        	|Sigla 										|SG_UF									|
 | COD_*		        | `VARCHAR/BIGINT/TINYINT``	|Código				 						|COD_UF									|
 
-## 📌 Padrões de nomenclatura utilizados de nomenclatura
+## 📌 Padrão de ALIAS utilizados.
 
 Os padrões adotados para a criação de índices, foreign keys, unique constraints, check constraints, procedures e triggers foram baseados em:
 - ALIAS: Utilizar os três primeiros caracteres do nome da entidade em caso de nome simples, exemplo, 
