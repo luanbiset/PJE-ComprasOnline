@@ -4,7 +4,7 @@ abordando boas práticas de modelagem dados, SQL avançado com procedimentos arm
 
 ---
 
-# 🚀 Tecnologias Utilizadas
+#  Tecnologias Utilizadas
 
 - MySQL 8+
 - SQL (DDL / DML / DCL)
@@ -14,11 +14,11 @@ abordando boas práticas de modelagem dados, SQL avançado com procedimentos arm
 ---
 # Parte 1 - Modelagem de Dados
 
-## 🧱 Arquitetura do Banco de Dados
+##  Arquitetura do Banco de Dados
 
 O sistema é baseado em um modelo relacional estruturado com forte integridade referencial.
 
-## 📌 Entidades principais
+##  Entidades principais
 
 - UF (`TAB_UF`)
 - Cidade (`TAB_CIDADE`)
@@ -33,9 +33,9 @@ O sistema é baseado em um modelo relacional estruturado com forte integridade r
 
 ---
 
-# 🗄️ Padrão de Banco de Dados
+# ️ Padrão de Banco de Dados
 
-## 📌 Convenção de nomenclatura utilizada para objetos 
+##  Convenção de nomenclatura utilizada para objetos 
 
 | Objeto            | Padrão        |Exemplo  	 			   | Resumo									                                                                            |
 |-------------------|--------------|-------------------------|-----------------------------------------------------------------------------------------------------------------------|
@@ -49,13 +49,13 @@ O sistema é baseado em um modelo relacional estruturado com forte integridade r
 | Trigger  			| `TRU/TRI/TRD_*`|TRU_ITEM_PEDIDO           |Gatilhos adicionados às tabelas para que, após uma determinada ação (Inserção, Atualização ou Exclusão) seja disparada uma segunda ação em uma outra tabela do banco de dados|
 
 
-## 📌 Convenções de nomenclatura para colunas
+##  Convenções de nomenclatura para colunas
 
 | Padrão		    | Tipo de dado     			|Resumo 									|				Exemplo                 |
-|-------------------|-----------------------|-------------------------------------------|---------------------------------------|
+|-------------------|---------------------------|-------------------------------------------|---------------------------------------|
 | IDT_*           	| `TINYINT/BIGINT`        	|Identificador da entidade					|IDT_CLIENTE							|
 | NAM_*             | `VARCHAR`		   			|Nome          								|NAM_CLIENTE							|
-| NUM_*		        | `NUMERIC/ALPHANUMERIC`		|Número   									|NUM_CPF								|
+| NUM_*		        | `NUMERIC/ALPHANUMERIC`	|Número   									|NUM_CPF								|
 | FLG_*		        | `NUMERIC`        			|Indica se o valor é verdadeiro ou falso    |FLG_ATIVO								|
 | VAL_*				| `Decimal`        			|Valor       								|VAL_TOTAL_PEDIDO						|
 | DES_*		        | `VARCHAR/TEXT`   			|Descrição  								|SP_LISTAR_VENDA_PERIODO				|
@@ -64,7 +64,7 @@ O sistema é baseado em um modelo relacional estruturado com forte integridade r
 | SG_*		        | `CHAR`		        	|Sigla 										|SG_UF									|
 | COD_*		        | `VARCHAR/BIGINT/TINYINT``	|Código				 						|COD_UF									|
 
-## 📌 Padrão de ALIAS utilizados.
+##  Padrão de ALIAS utilizados.
 
 Os padrões adotados para a criação de índices, foreign keys, unique constraints, check constraints, procedures e triggers foram baseados em:
 - ALIAS: Utilizar os três primeiros caracteres do nome da entidade em caso de nome simples, exemplo, 
@@ -75,7 +75,7 @@ Os padrões adotados para a criação de índices, foreign keys, unique constrai
 
 ---
 
-## 📌 Classificação de dados
+##  Classificação de dados
 
 Com o objetivo de garantir a governança e a segurança dos dados, foram criadas roles de sensibilidade para segregar o acesso à dados potencialmente sensíveis.
 
@@ -88,7 +88,7 @@ Com o objetivo de garantir a governança e a segurança dos dados, foram criadas
 
 ---
 
-## 📌 Estrutura de migrations
+##  Estrutura de migrations
 
 ```text
 /docker
@@ -97,7 +97,7 @@ Com o objetivo de garantir a governança e a segurança dos dados, foram criadas
 
 Os scripts para criação dos objetos do banco de dados podem ser encontrados na pasta [pje/migration](https://github.com/luanbiset/PJE-ComprasOnline/tree/main/pje/migration). Esses scripts estão preparados de forma idempotente, podendo ser reexecutado sem a ocorrencia de erros.
 
-## 📌 Docker Compose
+##  Docker Compose
 
 Para facilitar a inicialização do banco de dados, foi utilizado o Docker Compose para instanciá-lo e posteriormente aplicar os migrations. Na estrutura do docker, há um arquivo de configuração [docker-compose.yml](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/docker-compose.yml) onde estão definidos os parâmetros de configuração do banco de dados e flyway bem como o arquivo de configuração das variáveis de ambiente.
 
@@ -110,7 +110,7 @@ Para realizar a inicialização do banco de dados, deve-se seguir os passos abai
 
 O arquivo [docker-compose-run](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/docker-compose-run.bat) foi criado para que ao ser executado, instancie o banco de dados e aplique os migrations.
 
-## 📌 MER do banco de dados.
+##  MER do banco de dados.
 ![MER](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/pje_adm.png)
 
 # Parte 2 - SQL Avançado e Procedimentos Armazenados
@@ -144,4 +144,8 @@ Para realizar a chamada da procedure, utilize o comando abaixo:
 USE pje_adm;
 CALL pje_adm.sp_listar_pedido_valor_min('2026-06-01','2026-06-30','Games','Pendente',NULL,NULL,NULL);
 
-Para este caso não se faz necessário uma variável OUT para expor o resultado pelo fato da consulta não requerer uma 
+Por que nesse cenário não foi necessário atribuir o result set à uma variável ?
+Para este caso não se faz necessário uma variável OUT para expor o result set pelo fato de ser uma consulta simples, diferente do caso anterior, onde são realizadas duas consultas distintas e ambas são convertidas em JSON_OBJECT e atribuídos à uma variável que exibirá o resultado.
+
+
+# Parte 4 - 
