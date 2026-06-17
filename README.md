@@ -91,7 +91,7 @@ Com o objetivo de garantir a governança e a segurança dos dados, foram criadas
 ## 📌 Estrutura de migrations
 
 ```text
-/docker
+/pje
  /migration
 ````
 
