@@ -46,7 +46,7 @@ O sistema é baseado em um modelo relacional estruturado com forte integridade r
 | Unique Keys       | `ALIAS_UKSEQ` |CLI_UK01                  |Restrições impostas às tabelas nas quais indicam que um determinado valor diferente da primary key é único,um exemplo clássico é o número de CPF, apenas uma pessoa pode possuir um determinado número de CPf|
 | Check Constraints | `ALIAS_CKSEQ` |CLI_CK01                  |Restrições impostas às tabelas para obrigar que os valores aceitos por determinada coluna estejam previamente definidas, por exemplo, na coluna FLG_ATIVO só é possível registrar valores 0 e ou 1|
 | Procedures        | `SP_*`        |SP_LISTAR_VENDA_PERIODO   |Procedimentos armazenados que podem ser utilizados de ínumeras formas, tais quais, processamento de dados, relatórios, etc|
-| Trigger  			| `TRU/TRI/TRD_*|TRU_ITEM_PEDIDO           |Gatilhos adicionados às tabelas para que, após uma determinada ação (Inserção, Atualização ou Exclusão) seja disparada uma segunda ação em uma outra tabela do banco de dados|
+| Trigger  			| `TRU/TRI/TRD_*`|TRU_ITEM_PEDIDO           |Gatilhos adicionados às tabelas para que, após uma determinada ação (Inserção, Atualização ou Exclusão) seja disparada uma segunda ação em uma outra tabela do banco de dados|
 
 
 ## 📌 Convenções de nomenclatura para colunas
