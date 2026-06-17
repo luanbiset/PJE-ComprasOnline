@@ -29,7 +29,6 @@ CREATE PROCEDURE pje_adm.sp_listar_pedido_valor_min(
     IN vNumRegPag INT
 )
 BEGIN
-    DECLARE vResult JSON DEFAULT JSON_ARRAY();
 	DECLARE vOffSet INT;
 
     SET vInicioPeriodo = TIMESTAMP(DATE(vInicioPeriodo), '00:00:00');
@@ -45,32 +44,27 @@ BEGIN
         SET MESSAGE_TEXT = 'O período de dias informado não pode exceder 90 dias';
     END IF;
 
-    SELECT IFNULL(
-               JSON_ARRAYAGG(
-                   JSON_OBJECT(
-                       'NOME_cliente', NAM_CLIENTE,
-                       'IDT_PEDIDO', IDT_PEDIDO,
-                       'VALOR_TOTAL', VAL_TOTAL_PEDIDO
-                   )
-               ),
-               JSON_ARRAY()
-           )
-    FROM (
-        SELECT
+  
+         SELECT
             CLI.NAM_CLIENTE,
             PED.IDT_PEDIDO,
-            PED.VAL_TOTAL_PEDIDO
+            PED.VAL_TOTAL_PEDIDO,
+            PROD.DES_PRODUTO AS PRODUTO
+			
         FROM pje_adm.TAB_CLIENTE CLI
         INNER JOIN pje_adm.TAB_PEDIDO PED
             ON CLI.IDT_CLIENTE = PED.IDT_CLIENTE
         INNER JOIN pje_adm.TAB_STATUS_PEDIDO STATPED
             ON STATPED.IDT_STATUS_PEDIDO = PED.IDT_STATUS_PEDIDO
+        INNER JOIN pje_adm.TAB_ITEM_PEDIDO  ITEPED
+			ON ITEPED.IDT_PEDIDO  = PED.IDT_PEDIDO
+		inner join pje_adm.TAB_PRODUTO PROD
+			ON PROD.IDT_PRODUTO = ITEPED.IDT_PRODUTO
         WHERE PED.DAT_PEDIDO BETWEEN vInicioPeriodo AND vFimPeriodo
           AND PED.VAL_TOTAL_PEDIDO > vValorMin
           AND (vStatus IS NULL OR STATPED.DES_STATUS_PEDIDO = vStatus)
         ORDER BY PED.DAT_PEDIDO DESC
-        LIMIT vNumRegPag OFFSET vOffSet
-    ) TB;
+        LIMIT vNumRegPag OFFSET vOffSet;
 
 END ||
 

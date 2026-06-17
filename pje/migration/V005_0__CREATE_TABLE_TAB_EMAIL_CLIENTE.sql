@@ -1,6 +1,6 @@
 /*
 ---------------------------------------------------------------------------------------------------
--- MOTIVO:       PJE-001 >> Criação da entidade CIDADE
+-- MOTIVO:       PJE-001 >> Criação da entidade EMAIL_CLIENTE
 -- DATA :        16/06/2026
 -- SISTEMA:      PJE - Compras On-line
 -- AUTOR:        Luan Biset
@@ -25,8 +25,8 @@ SET @sql := (
 			FLG_ATIVO TINYINT(1) NOT NULL DEFAULT 1					 	 			 COMMENT ''[NOT_SECURITY_APPLY] - Flag que indica se é o e-mail ativo do cliente. Aceita os valores (1) Ativo e (0) Inativo.'',
             DAT_CRIACAO TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 	 			 COMMENT ''[NOT_SECURITY_APPLY] - Data de criação do registro.'',
             DAT_ATUALIZACAO TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT ''[NOT_SECURITY_APPLY] - Data de atualização do registro.'',
-            USR_CRIACAO BIGINT NOT NULL 								 			 COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela criação do registro.'',
-            USR_ALTERACAO BIGINT 										 			 COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela alteração do registro.'',
+            IDT_USR_CRIACAO BIGINT NOT NULL 								 			 COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela criação do registro.'',
+            IDT_USR_ALTERACAO BIGINT 										 			 COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela alteração do registro.'',
             CONSTRAINT EMACLI_PK PRIMARY KEY (IDT_EMAIL_CLIENTE),
             CONSTRAINT EMACLI_FK01 FOREIGN KEY (IDT_CLIENTE) REFERENCES TAB_CLIENTE (IDT_CLIENTE),
 			CONSTRAINT EMACLI_UK01 UNIQUE (IDT_CLIENTE,DES_EMAIL)
@@ -57,6 +57,6 @@ PREPARE stmt FROM @sql2;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
-INSERT INTO pje_adm.TAB_EMAIL_CLIENTE (IDT_CLIENTE,DES_EMAIL,FLG_ATIVO,DAT_CRIACAO,DAT_ATUALIZACAO,USR_CRIACAO,USR_ALTERACAO) VALUES (1,'teste@gmail.com',1,'2026-06-17 01:50:17','2026-06-17 01:50:17',1,NULL)
+INSERT INTO pje_adm.TAB_EMAIL_CLIENTE (IDT_CLIENTE,DES_EMAIL,FLG_ATIVO,DAT_CRIACAO,DAT_ATUALIZACAO,IDT_USR_CRIACAO,IDT_USR_ALTERACAO) VALUES (1,'teste@gmail.com',1,'2026-06-17 01:50:17','2026-06-17 01:50:17',1,NULL)
 ON DUPLICATE KEY UPDATE DES_EMAIL = VALUES(DES_EMAIL);
 COMMIT;

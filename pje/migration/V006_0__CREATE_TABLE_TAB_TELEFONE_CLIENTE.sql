@@ -1,6 +1,6 @@
 /*
 ---------------------------------------------------------------------------------------------------
--- MOTIVO:       PJE-001 >> Criação da entidade CIDADE
+-- MOTIVO:       PJE-001 >> Criação da entidade TELEFONE_CLIENTE
 -- DATA :        16/06/2026
 -- SISTEMA:      PJE - Compras On-line
 -- AUTOR:        Luan Biset
@@ -28,8 +28,8 @@ SET @sql :=
 			FLG_PRINCIPAL TINYINT(1) NOT NULL DEFAULT 1					 	 		 COMMENT ''[NOT_SECURITY_APPLY] - Flag que indica se é principal telefone do cliente. Aceita os valores (1) Principal (0) Não principal.'',
             DAT_CRIACAO TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 	 			 COMMENT ''[NOT_SECURITY_APPLY] - Data de criação do registro.'',
             DAT_ATUALIZACAO TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT ''[NOT_SECURITY_APPLY] - Data de atualização do registro.'',
-            USR_CRIACAO BIGINT NOT NULL 								 			 COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela criação do registro.'',
-            USR_ALTERACAO BIGINT 										 			 COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela alteração do registro.'',
+            IDT_USR_CRIACAO BIGINT NOT NULL 								 			 COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela criação do registro.'',
+            IDT_USR_ALTERACAO BIGINT 										 			 COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela alteração do registro.'',
             CONSTRAINT TELCLI_PK PRIMARY KEY (IDT_TELEFONE_CLIENTE),
             CONSTRAINT TELCLI_FK01 FOREIGN KEY (IDT_CLIENTE) REFERENCES TAB_CLIENTE (IDT_CLIENTE)
         ) COMMENT = ''[PII] - Tabela responsável por armazenar o telefone dos clientes.'''
@@ -59,7 +59,7 @@ PREPARE stmt FROM @sql2;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
-INSERT INTO pje_adm.TAB_TELEFONE_CLIENTE (IDT_CLIENTE,NUM_DDD,NUM_TELEFONE,TP_TELEFONE,FLG_PRINCIPAL,DAT_CRIACAO,DAT_ATUALIZACAO,USR_CRIACAO,USR_ALTERACAO) VALUES
+INSERT INTO pje_adm.TAB_TELEFONE_CLIENTE (IDT_CLIENTE,NUM_DDD,NUM_TELEFONE,TP_TELEFONE,FLG_PRINCIPAL,DAT_CRIACAO,DAT_ATUALIZACAO,IDT_USR_CRIACAO,IDT_USR_ALTERACAO) VALUES
 	 (1,71,'992070072',1,1,'2026-06-17 01:51:46','2026-06-17 01:51:46',1,NULL)
 	 ON DUPLICATE KEY UPDATE NUM_DDD = VALUES(NUM_DDD), NUM_TELEFONE = VALUES(NUM_TELEFONE), TP_TELEFONE = VALUES(TP_TELEFONE), FLG_PRINCIPAL = VALUES(FLG_PRINCIPAL);
 	 COMMIT;

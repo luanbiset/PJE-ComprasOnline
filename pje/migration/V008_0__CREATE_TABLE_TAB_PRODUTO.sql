@@ -1,6 +1,6 @@
 /*
 ---------------------------------------------------------------------------------------------------
--- MOTIVO:       PJE-001 >> Criação da entidade CIDADE
+-- MOTIVO:       PJE-001 >> Criação da entidade PRODUTO
 -- DATA :        16/06/2026
 -- SISTEMA:      PJE - Compras On-line
 -- AUTOR:        Luan Biset
@@ -28,12 +28,12 @@ SET @sql :=
 			FLG_ATIVO TINYINT(1) NOT NULL DEFAULT 1					 	 			 COMMENT ''[NOT_SECURITY_APPLY] - Flag que indica se o produto está ativo. Aceita os valores (1) Ativo e ou (0) Inativo.'',
             DAT_CRIACAO TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 	 			 COMMENT ''[NOT_SECURITY_APPLY] - Data de criação do registro.'',
             DAT_ATUALIZACAO TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT ''[NOT_SECURITY_APPLY] - Data de atualização do registro.'',
-            USR_CRIACAO BIGINT NOT NULL 								 			 COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela criação do registro.'',
-            USR_ALTERACAO BIGINT 										 			 COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela alteração do registro.'',
-            CONSTRAINT PROD_PK PRIMARY KEY (IDT_PRODUTO),
-            CONSTRAINT PROD_FK01 FOREIGN KEY (IDT_CATEGORIA_PRODUTO) REFERENCES TAB_CATEGORIA_PRODUTO (IDT_CATEGORIA_PRODUTO),
-			CONSTRAINT PROD_UK01 UNIQUE (DES_PRODUTO),
-			CONSTRAINT PROD_CK01 CHECK (FLG_ATIVO IN (0,1))
+            IDT_USR_CRIACAO BIGINT NOT NULL 								 			 COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela criação do registro.'',
+            IDT_USR_ALTERACAO BIGINT 										 			 COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela alteração do registro.'',
+            CONSTRAINT PRO_PK PRIMARY KEY (IDT_PRODUTO),
+            CONSTRAINT PRO_FK01 FOREIGN KEY (IDT_CATEGORIA_PRODUTO) REFERENCES TAB_CATEGORIA_PRODUTO (IDT_CATEGORIA_PRODUTO),
+			CONSTRAINT PRO_UK01 UNIQUE (DES_PRODUTO),
+			CONSTRAINT PRO_CK01 CHECK (FLG_ATIVO IN (0,1))
         ) COMMENT = ''[NOT_SECURITY_APPLY] - Tabela responsável por armazenar os Produtos.'''
     )
 );
@@ -50,10 +50,10 @@ SET @sql2 := (
               FROM information_schema.statistics
              WHERE table_schema = DATABASE()
                AND table_name = 'TAB_PRODUTO'
-			   AND index_name = 'PROD_IDX01'
+			   AND index_name = 'PRO_IDX01'
         ),
-        'SELECT ''Índice PROD_IDX01 já existe''',
-        'CREATE INDEX PROD_IDX01 ON TAB_PRODUTO(FLG_ATIVO)'
+        'SELECT ''Índice PRO_IDX01 já existe''',
+        'CREATE INDEX PRO_IDX01 ON TAB_PRODUTO(FLG_ATIVO)'
     )
 );
 
@@ -61,7 +61,7 @@ PREPARE stmt FROM @sql2;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
-INSERT INTO pje_adm.TAB_PRODUTO (IDT_CATEGORIA_PRODUTO,DES_PRODUTO,DES_IMAGEM_PROD,VAL_PRODUTO_UNIT,FLG_ATIVO,DAT_CRIACAO,DAT_ATUALIZACAO,USR_CRIACAO,USR_ALTERACAO) VALUES
+INSERT INTO pje_adm.TAB_PRODUTO (IDT_CATEGORIA_PRODUTO,DES_PRODUTO,DES_IMAGEM_PROD,VAL_PRODUTO_UNIT,FLG_ATIVO,DAT_CRIACAO,DAT_ATUALIZACAO,IDT_USR_CRIACAO,IDT_USR_ALTERACAO) VALUES
 	 (1,'Nintendo Switch 2','asdasdasd',4200.99,1,'2026-06-17 01:52:40','2026-06-17 01:52:40',1,NULL)
 	 ON DUPLICATE KEY UPDATE DES_PRODUTO = VALUES(DES_PRODUTO), DES_IMAGEM_PROD = VALUES(DES_IMAGEM_PROD), VAL_PRODUTO_UNIT = VALUES(VAL_PRODUTO_UNIT), FLG_ATIVO = VALUES(FLG_ATIVO);
 	 COMMIT;

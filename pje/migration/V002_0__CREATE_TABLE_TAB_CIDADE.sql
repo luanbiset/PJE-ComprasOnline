@@ -22,15 +22,15 @@ SET @sql := (
             IDT_CIDADE BIGINT NOT NULL AUTO_INCREMENT 					 COMMENT ''[NOT_SECURITY_APPLY] - Chave primária da tabela Cidade.'',
 			IDT_UF TINYINT NOT NULL								 	 COMMENT ''[NOT_SECURITY_APPLY] - Chave estrangeira para a tabela TAB_UF.'',
 			COD_CIDADE INT NOT NULL 							 COMMENT ''[NOT_SECURITY_APPLY] - Código único da cidade no IBGE.'',
-            DES_CIDADE VARCHAR(100) NOT NULL 						 COMMENT ''[NOT_SECURITY_APPLY] - Nome da Cidade.'',
+            NAM_CIDADE VARCHAR(100) NOT NULL 						 COMMENT ''[NOT_SECURITY_APPLY] - Nome da Cidade.'',
             FLG_ATIVO TINYINT(1) NOT NULL 							 COMMENT ''[NOT_SECURITY_APPLY] - Flag que indica se o registro está ativo ou não. Aceita os valores (1) Ativo e (0) Inativo.'',
             DAT_CRIACAO TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT ''[NOT_SECURITY_APPLY] - Data de criação do registro.'',
             DAT_ATUALIZACAO TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT ''[NOT_SECURITY_APPLY] - Data de atualização do registro.'',
-            USR_CRIACAO BIGINT NOT NULL COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela criação do registro.'',
-            USR_ALTERACAO BIGINT COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela alteração do registro.'',
+            IDT_USR_CRIACAO BIGINT NOT NULL COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela criação do registro.'',
+            IDT_USR_ALTERACAO BIGINT COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela alteração do registro.'',
             CONSTRAINT CID_PK PRIMARY KEY (IDT_CIDADE),
             CONSTRAINT CID_UK01 UNIQUE (COD_CIDADE),
-            CONSTRAINT CID_UK02 UNIQUE (IDT_UF,DES_CIDADE),
+            CONSTRAINT CID_UK02 UNIQUE (IDT_UF,NAM_CIDADE),
 			CONSTRAINT CID_FK01 FOREIGN KEY (IDT_UF) REFERENCES TAB_UF(IDT_UF)
         ) COMMENT = ''[NOT_SECURITY_APPLY] - Tabela responsável por armazenar as Cidades do Brasil.'''
     )
@@ -64,9 +64,9 @@ INSERT INTO TAB_CIDADE
 (
     IDT_UF,
     COD_CIDADE,
-    DES_CIDADE,
+    NAM_CIDADE,
     FLG_ATIVO,
-    USR_CRIACAO
+    IDT_USR_CRIACAO
 )
 VALUES
 (1, 2900108, 'Abaíra', 1, 1),
@@ -81,5 +81,5 @@ VALUES
 (1, 2913606, 'Ilhéus', 1, 1),
 (1, 2914802, 'Itabuna', 1, 1),
 (1, 2927408, 'Salvador', 1, 1),
-(1, 2933307, 'Vitória da Conquista', 1, 1) ON DUPLICATE KEY UPDATE COD_CIDADE = VALUES(COD_CIDADE), DES_CIDADE = VALUES(DES_CIDADE);
+(1, 2933307, 'Vitória da Conquista', 1, 1) ON DUPLICATE KEY UPDATE COD_CIDADE = VALUES(COD_CIDADE), NAM_CIDADE = VALUES(NAM_CIDADE);
 commit;
