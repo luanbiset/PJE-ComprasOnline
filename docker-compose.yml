@@ -21,6 +21,8 @@ services:
       - ./docker/scripts/init/init.sql:/docker-entrypoint-initdb.d/init.sql
     command:
       --default-authentication-plugin=caching_sha2_password
+      --log-bin-trust-function-creators=1
+
     networks:
       - network_pje
 

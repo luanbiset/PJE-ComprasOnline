@@ -26,8 +26,7 @@ CREATE PROCEDURE pje_adm.sp_listar_pedido_valor_min(
     IN vStatus VARCHAR(100),
     IN vValorMin DECIMAL(12,2),
     IN vNumPag INT,
-    IN vNumRegPag INT,
-    OUT vResultado JSON
+    IN vNumRegPag INT
 )
 BEGIN
     DECLARE vResult JSON DEFAULT JSON_ARRAY();
@@ -56,7 +55,6 @@ BEGIN
                ),
                JSON_ARRAY()
            )
-    INTO vResult
     FROM (
         SELECT
             CLI.NAM_CLIENTE,
@@ -74,8 +72,6 @@ BEGIN
         LIMIT vNumRegPag OFFSET vOffSet
     ) TB;
 
-    SET vResultado = JSON_OBJECT ('Resultado' , vResult );
-
 END ||
 
 DELIMITER ;
@@ -89,9 +85,7 @@ CALL pje_adm.sp_listar_pedido_valor_min(
     'Pendente',
     NULL,
     NULL,
-   	NULL,
-    @report
+   	NULL
 );
-SELECT @report AS lista_venda_valor_min;
 */
 

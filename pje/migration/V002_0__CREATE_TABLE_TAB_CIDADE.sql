@@ -81,5 +81,5 @@ VALUES
 (1, 2913606, 'Ilhéus', 1, 1),
 (1, 2914802, 'Itabuna', 1, 1),
 (1, 2927408, 'Salvador', 1, 1),
-(1, 2933307, 'Vitória da Conquista', 1, 1);
+(1, 2933307, 'Vitória da Conquista', 1, 1) ON DUPLICATE KEY UPDATE COD_CIDADE = VALUES(COD_CIDADE), DES_CIDADE = VALUES(DES_CIDADE);
 commit;
