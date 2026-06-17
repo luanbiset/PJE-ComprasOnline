@@ -30,7 +30,7 @@ SET @sql :=
             CONSTRAINT CATPRO_PK PRIMARY KEY (IDT_CATEGORIA_PRODUTO),
             CONSTRAINT CATPRO_UK01 UNIQUE (DES_CATEGORIA),
 			CONSTRAINT CATPRO_CK01 CHECK (FLG_ATIVO IN (0,1))
-        ) COMMENT = ''[NOT_SECURITY_APPLY] - Tabela responsável por armazenar o telefone dos clientes.'''
+        ) COMMENT = ''[NOT_SECURITY_APPLY] - Tabela responsável por armazenar as categorias dos produtos.'''
     )
 );
 

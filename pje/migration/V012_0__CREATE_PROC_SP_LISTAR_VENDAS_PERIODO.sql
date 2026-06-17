@@ -53,8 +53,7 @@ BEGIN
         INNER JOIN pje_adm.TAB_PEDIDO PED ON ITEMPED.IDT_PEDIDO = PED.IDT_PEDIDO
         INNER JOIN pje_adm.TAB_PRODUTO PROD ON ITEMPED.IDT_PRODUTO = PROD.IDT_PRODUTO
         INNER JOIN pje_adm.TAB_CATEGORIA_PRODUTO CATPROD ON PROD.IDT_CATEGORIA_PRODUTO = CATPROD.IDT_CATEGORIA_PRODUTO
-        WHERE 1=1
-        AND PED.DAT_PEDIDO BETWEEN vInicioPeriodo AND vFimPeriodo
+        WHERE PED.DAT_PEDIDO BETWEEN vInicioPeriodo AND vFimPeriodo
         AND (vCategoria IS NULL OR CATPROD.DES_CATEGORIA = vCategoria)
         GROUP BY PROD.DES_PRODUTO
     ) TB;
@@ -70,11 +69,12 @@ END ||
 
 DELIMITER ;
 
-
--- USE pje_adm;
--- call pje_adm.sp_listar_venda_periodo('2026-01-01',
---     '2026-06-30',
---    'Games',
---    @report
---);
---SELECT @report AS lista_venda_periodo;
+/*
+ USE pje_adm;
+ call pje_adm.sp_listar_venda_periodo('2026-01-01',
+     '2026-06-30',
+    'Games',
+    @report
+);
+SELECT @report AS lista_venda_periodo;
+*/

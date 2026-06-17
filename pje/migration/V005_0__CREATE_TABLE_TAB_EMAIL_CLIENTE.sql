@@ -30,7 +30,7 @@ SET @sql := (
             CONSTRAINT EMACLI_PK PRIMARY KEY (IDT_EMAIL_CLIENTE),
             CONSTRAINT EMACLI_FK01 FOREIGN KEY (IDT_CLIENTE) REFERENCES TAB_CLIENTE (IDT_CLIENTE),
 			CONSTRAINT EMACLI_UK01 UNIQUE (IDT_CLIENTE,DES_EMAIL)
-        ) COMMENT = ''[PII] - Tabela responsável por armazenar o endereço dos clientes.'''
+        ) COMMENT = ''[PII] - Tabela responsável por armazenar o endereço de email dos clientes.'''
     )
 );
 

@@ -24,7 +24,7 @@ SET @sql :=
 			IDT_CLIENTE BIGINT NOT NULL									 			 COMMENT ''[NOT_SECURITY_APPLY] - Chave estrangeira para a tabela CLIENTE.'',
 			IDT_STATUS_PEDIDO BIGINT NOT NULL										 COMMENT ''[NOT_SECURITY_APPLY] - Chave estrangeira para a tabela STATUS_PEDIDO.'',
 			NUM_PEDIDO INT NOT NULL										 			 COMMENT ''[STRATEGIC_FIN] - Número do pedido.'',
-			VAL_TOTAL_PEDIDO DECIMAL(12,2) NOT NULL									 COMMENT ''[NOT_SECURITY_APPLY] - Valor total do pedido.'',
+			VAL_TOTAL_PEDIDO DECIMAL(12,2) NOT NULL									 COMMENT ''[STRATEGIC_FIN] - Valor total do pedido.'',
 			DES_OBS VARCHAR(300)												 	 COMMENT ''[NOT_SECURITY_APPLY] - Observações adicionadas ao pedido.'',
             DAT_PEDIDO TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 	 			 COMMENT ''[NOT_SECURITY_APPLY] - Data de criação do registro.'',
             DAT_ATUALIZACAO TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT ''[NOT_SECURITY_APPLY] - Data de atualização do registro.'',
