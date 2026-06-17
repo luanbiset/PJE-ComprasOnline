@@ -112,3 +112,36 @@ O arquivo [docker-compose-run](https://github.com/luanbiset/PJE-ComprasOnline/bl
 
 ## 📌 MER do banco de dados.
 ![MER](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/pje_adm.png)
+
+# Parte 2 - SQL Avançado e Procedimentos Armazenados
+Para esta etapa, foi desenolvido o procedimento [SP_LISTAR_VENDAS_PERIODO](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/pje/migration/V012_0__CREATE_PROC_SP_LISTAR_VENDAS_PERIODO.sql), procedimento este, responsável por retornar os dados:
+- Total de pedidos;
+- Soma do valor total dos pedidos;
+- Valor médio por pedido;
+- Lista de produtos da categoria selecionada e quantidade de produtos vendidos no período.
+```
+Para realizar a chamada da procedure, execute o comando abaixo:
+
+USE pje_adm;
+
+CALL pje_adm.sp_listar_venda_periodo('2026-01-01','2026-06-30','Games',@report);
+
+SELECT @report AS lista_venda_periodo;
+```
+
+# Parte 3 - Otimização de Query.
+Para esta situação, foram realizadas as seguintes modificações:
+- Estabelecidos alguns filtros obrigatórios (Data de inicio/fim, status do pedido e valor mínimo);
+- Estabelecida uma regra para que o período de datas que se deseja selecionar não tenha mais de 90 dias, evitando uma consulta muito custosa no banco de dados que pode acarretar em uso excessivo de recursos;
+- Estabelecida uma paginação mínima para caso o usuário não informe (50 registros por página);
+- Estabelecido um status padrão (Concluído) caso o usuário não informe;
+- Foi criado um índice para as colunas DAT_PEDIDO,IDT_STATUS_PEDIDO, cobrindo a consulta nas clausula where/and.
+- Foi implementada uma procedure para encapsular a consulta e suas melhorias no arquivo [SP_LISTAR_POR_VALOR_MINIMO](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/pje/migration/V013_0__CREATE_PROC_SP_LISTAR_POR_VALOR_MINIMO.sql).
+
+```
+Para realizar a chamada da procedure, utilize o comando abaixo:
+
+USE pje_adm;
+CALL pje_adm.sp_listar_pedido_valor_min('2026-06-01','2026-06-30','Games','Pendente',NULL,NULL,NULL);
+
+Para este caso não se faz necessário uma variável OUT para expor o resultado pelo fato da consulta não requerer uma 
