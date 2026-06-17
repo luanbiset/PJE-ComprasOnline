@@ -91,7 +91,7 @@ Com o objetivo de garantir a governança e a segurança dos dados, foram criadas
 ## 📌 Estrutura de migrations
 
 ```text
-/pje
+/docker
  /migration
 ````
 
@@ -109,3 +109,6 @@ Para realizar a inicialização do banco de dados, deve-se seguir os passos abai
 - Executar o arquivo [docker-compose-run](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/docker-compose-run.bat).
 
 O arquivo [docker-compose-run](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/docker-compose-run.bat) foi criado para que ao ser executado, instancie o banco de dados e aplique os migrations.
+
+## 📌 MER do banco de dados.
+![MER](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/pje_adm.png)
