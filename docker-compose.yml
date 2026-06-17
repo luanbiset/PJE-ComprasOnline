@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
 
   mysql:
@@ -39,6 +37,8 @@ services:
         FLYWAY_LOCATIONS: ${FLYWAY_LOCATIONS}
         FLYWAY_TABLE: ${FLYWAY_TABLE}
         FLYWAY_BASELINE_ON_MIGRATE: ${FLYWAY_BASELINE_ON_MIGRATE}
+        FLYWAY_CONNECT_RETRIES: 60
+        FLYWAY_LOG_LEVEL: error
     entrypoint: >
       bash -c "
         flyway repair &&
