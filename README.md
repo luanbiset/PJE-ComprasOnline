@@ -45,7 +45,7 @@ O sistema é baseado em um modelo relacional estruturado em 3FN com forte integr
 | Foreign Keys      | `ALIAS_FKSEQ` |CLI_FK01                  |Restrições impostas às tabelas que possuem relacionamento direto com uma outra,evitando o que é chamado de registro órfão, quando existe na tabela filha, mas não na pai|
 | Unique Keys       | `ALIAS_UKSEQ` |CLI_UK01                  |Restrições impostas às tabelas nas quais indicam que um determinado valor diferente da primary key é único,um exemplo clássico é o número de CPF, apenas uma pessoa pode possuir um determinado número de CPf|
 | Check Constraints | `ALIAS_CKSEQ` |CLI_CK01                  |Restrições impostas às tabelas para obrigar que os valores aceitos por determinada coluna estejam previamente definidas, por exemplo, na coluna FLG_ATIVO só é possível registrar valores 0 e ou 1|
-| Procedures        | `SP_*`        |SP_LISTAR_VENDA_PERIODO   |Procedimentos armazenados que podem ser utilizados de inúmeras formas, tais quais, processamento de dados, relatórios, etc|
+| Procedures        | `SP_*`        |SP_RELATORIO_VENDAS_PERIODO   |Procedimentos armazenados que podem ser utilizados de inúmeras formas, tais quais, processamento de dados, relatórios, etc|
 | Trigger  			| `TRU/TRI/TRD_*`|TRU_ITEM_PEDIDO           |Gatilhos adicionados às tabelas para que, após uma determinada ação (Inserção, Atualização ou Exclusão) seja disparada uma segunda ação em uma outra tabela do banco de dados|
 
 
@@ -58,7 +58,7 @@ O sistema é baseado em um modelo relacional estruturado em 3FN com forte integr
 | NUM_*		        | `NUMERIC/ALPHANUMERIC`	|Número   									|NUM_CPF								|
 | FLG_*		        | `NUMERIC`        			|Indica se o valor é verdadeiro ou falso    |FLG_ATIVO								|
 | VAL_*				| `Decimal`        			|Valor       								|VAL_TOTAL_PEDIDO						|
-| DES_*		        | `VARCHAR/TEXT`   			|Descrição  								|SP_LISTAR_VENDA_PERIODO				|
+| DES_*		        | `VARCHAR/TEXT`   			|Descrição  								|DES_COMPLEMENTIO						|
 | DAT_*		        | `DATE/TIMESTAMP`        	|Data  										|DAT_NASCIMENTO/DAT_CRIACAO				|
 | TP_*		        | `TINYINT`		        	|Tipo (Domínio)								|TP_TELEFONE							|
 | SG_*		        | `CHAR`		        	|Sigla 										|SG_UF									|
@@ -124,9 +124,9 @@ Para realizar a chamada da procedure, execute o comando abaixo:
 
 USE pje_adm;
 
-CALL pje_adm.sp_listar_venda_periodo('2026-01-01','2026-06-30','Games',@report);
+CALL pje_adm.SP_RELATORIO_VENDAS_PERIODO('2026-01-01','2026-06-30','Games',@report);
 
-SELECT @report AS lista_venda_periodo;
+SELECT @report AS report_venda_periodo;
 ```
 
 # Parte 3 - Otimização de Query.
