@@ -221,7 +221,8 @@ WHERE nome = 'Vincular boleto'
   AND ativo <> 1;  
 ```
 
-## Desfecho
-- O script é Totalmente idempotente, permitindo atualizar o registro caso exista unique key para o campo nome e seja disparada uma exceção de duplicate key, permitindo atualizar os valores das demais colunas sem a necessidade de remover e reinserir o registro;
+## Conclusão
+- Os scripts são totalmente idempotentes, permitindo atualizar o registro caso o mesmo já exista e caso não exista, será inserido utilizando como base, o nome 'Vincular boleto';
+	- Salientando que, na solução 1, há necessidade de existir uma unique key no campo Nome para que seja disparada uma exceção de duplicate key.
 - Coerente, o script pode ser executado em qualquer ambiente, seja DEV/QA/PROD pelo fato de validar a existencia de um registro com o nome 'Vincular boleto
 - Seguro, garante que não haja divergencia de dados entre os diferentes ambientes DEV/QA/PROD, acarretando na integrade total nos testes integrados das aplicações.
