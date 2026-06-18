@@ -40,24 +40,4 @@ PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
-
-SET @sql2 := (
-    SELECT IF(
-        EXISTS (
-            SELECT 1
-              FROM information_schema.statistics
-             WHERE table_schema = DATABASE()
-               AND table_name = 'TAB_UF'
-			   AND index_name = 'UF_IDX01'
-        ),
-        'SELECT ''Índice UF_IDX01 já existe''',
-        'CREATE INDEX UF_IDX01 ON TAB_UF(FLG_ATIVO)'
-    )
-);
-
-PREPARE stmt FROM @sql2;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
-
-
 insert into TAB_UF (COD_UF,NAM_UF,SG_UF,DAT_CRIACAO,DAT_ATUALIZACAO,IDT_USR_CRIACAO) values (5,'BAHIA','BA',current_timestamp,current_timestamp,1) ON DUPLICATE KEY UPDATE COD_UF = values (COD_UF), NAM_UF = Values(NAM_UF), SG_UF = VALUES (SG_UF);
