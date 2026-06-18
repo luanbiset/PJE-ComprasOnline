@@ -12,14 +12,14 @@ USE pje_adm;
 -- +---------------------------------------------------------+--
 -- 1. Exclusao da procedure de migration
 -- +---------------------------------------------------------+--
-DROP PROCEDURE IF EXISTS pje_adm.sp_listar_venda_periodo;
+DROP PROCEDURE IF EXISTS pje_adm.SP_RELATORIO_VENDAS_PERIODO;
 
 -- +---------------------------------------------------------+--
 -- 2. Criacao da procedure de migration
 -- +---------------------------------------------------------+--
 DELIMITER ||
 
-CREATE PROCEDURE pje_adm.sp_listar_venda_periodo(
+CREATE PROCEDURE pje_adm.SP_RELATORIO_VENDAS_PERIODO(
     IN vInicioPeriodo DATE,
     IN vFimPeriodo DATE,
     IN vCategoria VARCHAR(100),
@@ -71,7 +71,7 @@ DELIMITER ;
 
 /*
  USE pje_adm;
- call pje_adm.sp_listar_venda_periodo('2026-01-01',
+ call pje_adm.sp_relatorio_vendas_periodo('2026-01-01',
      '2026-06-30',
     'Games',
     @report
