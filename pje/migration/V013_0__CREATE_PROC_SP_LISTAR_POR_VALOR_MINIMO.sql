@@ -60,9 +60,12 @@ BEGIN
 			ON ITEPED.IDT_PEDIDO  = PED.IDT_PEDIDO
 		inner join pje_adm.TAB_PRODUTO PROD
 			ON PROD.IDT_PRODUTO = ITEPED.IDT_PRODUTO
-        WHERE PED.DAT_PEDIDO BETWEEN vInicioPeriodo AND vFimPeriodo
-          AND PED.VAL_TOTAL_PEDIDO > vValorMin
-          AND (vStatus IS NULL OR STATPED.DES_STATUS_PEDIDO = vStatus)
+        WHERE 1=1
+		AND STATPED.DES_STATUS_PEDIDO = vStatus
+		AND PED.DAT_PEDIDO BETWEEN vInicioPeriodo AND vFimPeriodo
+		AND PED.VAL_TOTAL_PEDIDO > vValorMin
+		
+        
         ORDER BY PED.DAT_PEDIDO DESC
         LIMIT vNumRegPag OFFSET vOffSet;
 
