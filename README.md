@@ -58,7 +58,7 @@ O sistema é baseado em um modelo relacional estruturado em 3FN com forte integr
 | NUM_*		        | `NUMERIC/ALPHANUMERIC`	|Número   									|NUM_CPF								|
 | FLG_*		        | `NUMERIC`        			|Indica se o valor é verdadeiro ou falso    |FLG_ATIVO								|
 | VAL_*				| `Decimal`        			|Valor       								|VAL_TOTAL_PEDIDO						|
-| DES_*		        | `VARCHAR/TEXT`   			|Descrição  								|DES_COMPLEMENTIO						|
+| DES_*		        | `VARCHAR/TEXT`   			|Descrição  								|DES_COMPLEMENTO				|
 | DAT_*		        | `DATE/TIMESTAMP`        	|Data  										|DAT_NASCIMENTO/DAT_CRIACAO				|
 | TP_*		        | `TINYINT`		        	|Tipo (Domínio)								|TP_TELEFONE							|
 | SG_*		        | `CHAR`		        	|Sigla 										|SG_UF									|
@@ -114,7 +114,7 @@ O arquivo [docker-compose-run](https://github.com/luanbiset/PJE-ComprasOnline/bl
 ![MER](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/pje_adm.png)
 
 # Parte 2 - SQL Avançado e Procedimentos Armazenados
-Para esta etapa, foi desenvolvido o procedimento [SP_LISTAR_VENDAS_PERIODO](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/pje/migration/V012_0__CREATE_PROC_SP_LISTAR_VENDAS_PERIODO.sql), procedimento este, responsável por retornar os dados:
+Para esta etapa, foi desenvolvido o procedimento [SP_RELATORIO_VENDAS_PERIODO](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/pje/migration/V012_0__CREATE_PROC_SP_RELATORIO_VENDAS_PERIODO.sql), procedimento este, responsável por retornar os dados:
 - Total de pedidos;
 - Soma do valor total dos pedidos;
 - Valor médio por pedido;
@@ -223,4 +223,4 @@ WHERE nome = 'Vincular boleto'
 ## Desfecho
 - O script é Totalmente idempotente, permitindo atualizar o registro caso exista unique key para o campo nome e seja disparada uma exceção de duplicate key, permitindo atualizar os valores das demais colunas sem a necessidade de remover e reinserir o registro;
 - Coerente, o script pode ser executado em qualquer ambiente, seja DEV/QA/PROD pelo fato de validar a existencia de um registro com o nome 'Vincular boleto
-- Seguro, garante que não haja divergencia de dados entre os diferentes ambientes DEV/QA/PROD, acarretando na integridade total nos testes integrados das aplicações.
+- Seguro, garante que não haja divergência de dados entre os diferentes ambientes DEV/QA/PROD, acarretando na integridade total nos testes integrados das aplicações.
