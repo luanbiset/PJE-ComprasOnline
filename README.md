@@ -58,11 +58,11 @@ O sistema é baseado em um modelo relacional estruturado com forte integridade r
 | NUM_*		        | `NUMERIC/ALPHANUMERIC`	|Número   									|NUM_CPF								|
 | FLG_*		        | `NUMERIC`        			|Indica se o valor é verdadeiro ou falso    |FLG_ATIVO								|
 | VAL_*				| `Decimal`        			|Valor       								|VAL_TOTAL_PEDIDO						|
-| DES_*		        | `VARCHAR/TEXT`   			|Descrição  								|SP_LISTAR_VENDA_PERIODO				|
+| DES_*		        | `VARCHAR/TEXT`   			|Descrição  								|DES_COMPLEMENTO   						|
 | DAT_*		        | `DATE/TIMESTAMP`        	|Data  										|DAT_NASCIMENTO/DAT_CRIACAO				|
 | TP_*		        | `TINYINT`		        	|Tipo (Domínio)								|TP_TELEFONE							|
 | SG_*		        | `CHAR`		        	|Sigla 										|SG_UF									|
-| COD_*		        | `VARCHAR/BIGINT/TINYINT``	|Código				 						|COD_UF									|
+| COD_*		        | `VARCHAR/BIGINT/TINYINT`	|Código				 						|COD_UF									|
 
 ##  Padrão de ALIAS utilizados.
 
@@ -81,10 +81,10 @@ Com o objetivo de garantir a governança e a segurança dos dados, foram criadas
 
 | Sensibilidade     | Resumo	     												|				Exemplo                      |
 |-------------------|---------------------------------------------------------------|--------------------------------------------|
-|NOT_SECURITY_APPLY | São dados acessíveis ao púbico e que não possuem nenhum tipo de segurança aplicada pelo fato de não possuir restrições legais definidas pela LGPD.        	|			 NAM_CIDADE/NAM_UF			     |
-|PII                | São dados que pertencem ao cliente e que são protegidos por lei e ser devidamente tratados para que não estejam  visíveis ao público												|			NUM_CPF/DAT_NASCIMENTO/DES_EMAIL |
-|STRATEGIC_FIN      | Dados da companhia que norteam a tomada de decisão financeira e contábil								|			VAL_TOTAL_PEDIDO                 |
-|STRATEGIC_OPE	    | Dados da companhia que norteam a tomada de decisão operacional no dia dia       						|			QTD_ITEM_PEDIDO					 |
+|`NOT_SECURITY_APPLY` | São dados acessíveis ao púbico e que não possuem nenhum tipo de segurança aplicada pelo fato de não possuir restrições legais definidas pela LGPD.        	|			 NAM_CIDADE/NAM_UF			     |
+|`PII`                | São dados que pertencem ao cliente e que são protegidos por lei e ser devidamente tratados para que não estejam  visíveis ao público												|			NUM_CPF/DAT_NASCIMENTO/DES_EMAIL |
+|`STRATEGIC_FIN`      | Dados da companhia que norteam a tomada de decisão financeira e contábil								|			VAL_TOTAL_PEDIDO                 |
+|`STRATEGIC_OPE`	    | Dados da companhia que norteam a tomada de decisão operacional no dia dia       						|			QTD_ITEM_PEDIDO					 |
 
 ---
 
@@ -131,6 +131,7 @@ SELECT @report AS lista_venda_periodo;
 
 # Parte 3 - Otimização de Query.
 Para esta situação, foram realizadas as seguintes modificações:
+- Ajuste da sintaxe das consultas para o padrão ANSI SQL, garantindo a utilização das boas práticas e dos padrões atuais de desenvolvimento.
 - Estabelecidos alguns filtros obrigatórios (Data de inicio/fim, status do pedido e valor mínimo);
 - Estabelecida uma regra para que o período de datas que se deseja selecionar não tenha mais de 90 dias, evitando uma consulta muito custosa no banco de dados que pode acarretar em uso excessivo de recursos;
 - Estabelecida uma paginação mínima para caso o usuário não informe (50 registros por página);
@@ -144,8 +145,83 @@ Para realizar a chamada da procedure, utilize o comando abaixo:
 USE pje_adm;
 CALL pje_adm.sp_listar_pedido_valor_min('2026-06-01','2026-06-30','Games','Pendente',NULL,NULL,NULL);
 
+```
 Por que nesse cenário não foi necessário atribuir o result set à uma variável ?
 Para este caso não se faz necessário uma variável OUT para expor o result set pelo fato de ser uma consulta simples, diferente do caso anterior, onde são realizadas duas consultas distintas e ambas são convertidas em JSON_OBJECT e atribuídos à uma variável que exibirá o resultado.
 
+# Parte 4 - Migrations
+## Análise do script:
 
-# Parte 4 - 
+```
+INSERT INTO recurso_acao_processo (
+id_recurso_acao_processo,
+nome,
+ativo,
+data_inclusao,
+id_usuario_inclusao
+) VALUES (
+532,
+'Vincular boleto',
+1,
+NAW(),
+id_user_homologacao
+);
+```
+É possível observar os seguintes pontos:
+- A função NAW() está escrita de forma equivocada, embora leia-se NAW, o correto para chamar a função seria NOW();
+- A coluna `ID_USER_HOMOLOGACAO` está sendo mencionada dentro da cláusula VALUES sem sua devida declaração prévia, neste, caso, teria que ser construída uma procedure, onde essa variável seria preenchida e posteriormente utilizada. Outra opção seria realizar um subselect, obtendo o valor desejado para ser inserido.
+- A chave primária da tabela está sendo passada de forma explícita, isso pode acarretar em algumas situações: 
+	- Erro na inserção por chave duplicada pelo fato de não estar sendo gerenciado pelo SGBD. 
+	- Não está sendo realizada a validação de existência do registro 'Vincular boleto', caso haja uma chave única para este campo, ocasionará em erro de chave violada.
+
+## Solução 1 - Necessita de Unique Key no campo Nome
+Para solucionar o problema é possível utilizar uma forma de insert similar ao comando Merge utilizado em outros SGBDs.
+```
+INSERT INTO recurso_acao_processo (
+nome,
+ativo,
+data_inclusao,
+id_usuario_inclusao
+) VALUES (
+'Vincular boleto',
+1,
+NOW(),
+(select idt_usuario from TAB_USUARIO where nam_usuario = 'APP' LIMIT 1)
+) ON DUPLICATE KEY UPDATE 
+nome = values (nome), 
+ativo = values(ativo), 
+data_inclusao = values(data_inclusao), 
+id_usuario_inclusao = values(id_usuario_inclusao);
+```
+
+## Solução 2 - Sem necessidade de Unique Key no campo Nome, utilizando subselect.
+```
+INSERT INTO recurso_acao_processo (
+    nome,
+    ativo,
+    data_inclusao,
+    id_usuario_inclusao
+)
+SELECT
+    'Vincular boleto',
+    1,
+    NOW(),
+    (SELECT idt_usuario FROM TAB_USUARIO WHERE nam_usuario = 'APP' LIMIT 1)
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM recurso_acao_processo
+    WHERE nome = 'Vincular boleto'
+);
+
+UPDATE recurso_acao_processo
+SET ativo                = 1,
+    data_alteracao       = now(),
+    id_usuario_alteracao = (SELECT idt_usuario FROM TAB_USUARIO WHERE nam_usuario = 'APP' LIMIT 1)
+WHERE nome = 'Vincular boleto'
+  AND ativo <> 1;  
+```
+
+## Desfecho
+- O script é Totalmente idempotente, permitindo atualizar o registro caso exista unique key para o campo nome e seja disparada uma exceção de duplicate key, permitindo atualizar os valores das demais colunas sem a necessidade de remover e reinserir o registro;
+- Coerente, o script pode ser executado em qualquer ambiente, seja DEV/QA/PROD pelo fato de validar a existencia de um registro com o nome 'Vincular boleto
+- Seguro, garante que não haja divergencia de dados entre os diferentes ambientes DEV/QA/PROD, acarretando na integrade total nos testes integrados das aplicações.
