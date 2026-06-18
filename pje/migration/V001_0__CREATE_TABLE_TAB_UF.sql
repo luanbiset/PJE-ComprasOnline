@@ -31,7 +31,8 @@ SET @sql := (
             CONSTRAINT UF_PK PRIMARY KEY (IDT_UF),
             CONSTRAINT UF_UK01 UNIQUE (COD_UF_IBGE),
             CONSTRAINT UF_UK02 UNIQUE (NAM_UF),
-            CONSTRAINT UF_UK03 UNIQUE (SG_UF)
+            CONSTRAINT UF_UK03 UNIQUE (SG_UF),
+			CONSTRAINT UF_CK01 CHECK (FLG_ATIVO IN (0,1))
         ) COMMENT = ''[NOT_SECURITY_APPLY] - Tabela responsável por armazenar as UF do Brasil.'''
     )
 );

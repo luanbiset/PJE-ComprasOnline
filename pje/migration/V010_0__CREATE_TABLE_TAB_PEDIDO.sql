@@ -20,7 +20,7 @@ SET @sql :=
         ),
         'SELECT ''Tabela TAB_PEDIDO já existe''',
         'CREATE TABLE TAB_PEDIDO (
-            IDT_PEDIDO BIGINT NOT NULL AUTO_INCREMENT 					 			 COMMENT ''[NOT_SECURITY_APPLY] - Chave primária da tabela PRODUTO.'',
+            IDT_PEDIDO BIGINT NOT NULL AUTO_INCREMENT 					 			 COMMENT ''[NOT_SECURITY_APPLY] - Chave primária da tabela PEDIDO.'',
 			IDT_CLIENTE BIGINT NOT NULL									 			 COMMENT ''[NOT_SECURITY_APPLY] - Chave estrangeira para a tabela CLIENTE.'',
 			IDT_STATUS_PEDIDO BIGINT NOT NULL										 COMMENT ''[NOT_SECURITY_APPLY] - Chave estrangeira para a tabela STATUS_PEDIDO.'',
 			NUM_PEDIDO INT NOT NULL										 			 COMMENT ''[STRATEGIC_FIN] - Número do pedido.'',
@@ -50,9 +50,9 @@ SET @sql2 :=
             SELECT 1
               FROM information_schema.statistics
              WHERE table_schema = DATABASE()
-               AND index_name = 'ITEPED_IDX01'
+               AND index_name = 'PED_IDX01'
         ),
-		'SELECT ''Índice ITEPED_IDX01 já existe''',
+		'SELECT ''Índice PED_IDX01 já existe''',
 		'CREATE INDEX PED_IDX01 ON TAB_PEDIDO(IDT_STATUS_PEDIDO,DAT_PEDIDO,VAL_TOTAL_PEDIDO)'
 			 )
 );

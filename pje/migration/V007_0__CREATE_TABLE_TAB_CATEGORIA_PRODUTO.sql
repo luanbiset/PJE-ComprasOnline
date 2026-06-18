@@ -21,8 +21,8 @@ SET @sql :=
         'SELECT ''Tabela TAB_CATEGORIA_PRODUTO já existe''',
         'CREATE TABLE TAB_CATEGORIA_PRODUTO (
             IDT_CATEGORIA_PRODUTO BIGINT NOT NULL AUTO_INCREMENT 					 COMMENT ''[NOT_SECURITY_APPLY] - Chave primária da tabela CATEGORIA_PRODUTO.'',
-			DES_CATEGORIA VARCHAR(100)												 COMMENT ''[NOT_SECURITY_APPLY] - Descrição da categoria do produto.'',
-			FLG_ATIVO TINYINT(1) NOT NULL DEFAULT 1					 	 			 COMMENT ''[NOT_SECURITY_APPLY] - Flag que indica se é o e-mail ativo do cliente. Aceita os valores (1) Ativo e (0) Inativo.'',
+			DES_CATEGORIA VARCHAR(100)	NOT NULL											 COMMENT ''[NOT_SECURITY_APPLY] - Descrição da categoria do produto.'',
+			FLG_ATIVO TINYINT(1) NOT NULL DEFAULT 1					 	 			 COMMENT ''[NOT_SECURITY_APPLY] - Flag que indica se a categoria está ativa (1) ou inativa (0).'',
             DAT_CRIACAO TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 	 			 COMMENT ''[NOT_SECURITY_APPLY] - Data de criação do registro.'',
             DAT_ATUALIZACAO TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT ''[NOT_SECURITY_APPLY] - Data de atualização do registro.'',
             IDT_USR_CRIACAO BIGINT NOT NULL 								 			 COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela criação do registro.'',
@@ -39,24 +39,7 @@ PREPARE stmt FROM @sql;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
-SET @sql2 := (
-    SELECT IF(
-        EXISTS (
-            SELECT 1
-              FROM information_schema.statistics
-             WHERE table_schema = DATABASE()
-               AND table_name = 'TAB_CATEGORIA_PRODUTO'
-			   AND index_name = 'CATPRO_IDX01'
-        ),
-        'SELECT ''Índice CATPRO_IDX01 já existe''',
-        'CREATE INDEX CATPRO_IDX01 ON TAB_CATEGORIA_PRODUTO(FLG_ATIVO)'
-    )
-);
-
-PREPARE stmt FROM @sql2;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
 
 INSERT INTO pje_adm.TAB_CATEGORIA_PRODUTO (DES_CATEGORIA,FLG_ATIVO,DAT_CRIACAO,DAT_ATUALIZACAO,IDT_USR_CRIACAO,IDT_USR_ALTERACAO) VALUES ('Games',1,'2026-06-17 01:47:13','2026-06-17 01:47:13',1,NULL)
-ON DUPLICATE KEY UPDATE DES_CATEGORIA = VALUES(DES_CATEGORIA), FLG_ATIVO = VALUES(FLG_ATIVO);
+ON DUPLICATE KEY UPDATE DES_CATEGORIA = VALUES(DES_CATEGORIA), FLG_ATIVO = VALUES(FLG_ATIVO), DAT_ATUALIZACAO = CURRENT_TIMESTAMP, IDT_USR_ALTERACAO = values(IDT_USR_ALTERACAO);
 COMMIT;
