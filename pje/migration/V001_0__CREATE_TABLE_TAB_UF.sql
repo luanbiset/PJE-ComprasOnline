@@ -60,4 +60,4 @@ EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
 
-insert into TAB_UF (COD_UF,NAM_UF,SG_UF,DAT_CRIACAO,DAT_ATUALIZACAO,IDT_USR_CRIACAO) values (5,'BAHIA','BA',current_timestamp,current_timestamp,1);
+insert into TAB_UF (COD_UF,NAM_UF,SG_UF,DAT_CRIACAO,DAT_ATUALIZACAO,IDT_USR_CRIACAO) values (5,'BAHIA','BA',current_timestamp,current_timestamp,1) ON DUPLICATE KEY UPDATE COD_UF = values (COD_UF), NAM_UF = Values(NAM_UF), SG_UF = VALUES (SG_UF);
