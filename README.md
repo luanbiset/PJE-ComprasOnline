@@ -16,7 +16,7 @@ abordando boas práticas de modelagem dados, SQL avançado com procedimentos arm
 
 ##  Arquitetura do Banco de Dados
 
-O sistema é baseado em um modelo relacional estruturado com forte integridade referencial.
+O sistema é baseado em um modelo relacional estruturado em 3FN com forte integridade referencial.
 
 ##  Entidades principais
 
@@ -45,7 +45,7 @@ O sistema é baseado em um modelo relacional estruturado com forte integridade r
 | Foreign Keys      | `ALIAS_FKSEQ` |CLI_FK01                  |Restrições impostas às tabelas que possuem relacionamento direto com uma outra,evitando o que é chamado de registro órfão, quando existe na tabela filha, mas não na pai|
 | Unique Keys       | `ALIAS_UKSEQ` |CLI_UK01                  |Restrições impostas às tabelas nas quais indicam que um determinado valor diferente da primary key é único,um exemplo clássico é o número de CPF, apenas uma pessoa pode possuir um determinado número de CPf|
 | Check Constraints | `ALIAS_CKSEQ` |CLI_CK01                  |Restrições impostas às tabelas para obrigar que os valores aceitos por determinada coluna estejam previamente definidas, por exemplo, na coluna FLG_ATIVO só é possível registrar valores 0 e ou 1|
-| Procedures        | `SP_*`        |SP_LISTAR_VENDA_PERIODO   |Procedimentos armazenados que podem ser utilizados de ínumeras formas, tais quais, processamento de dados, relatórios, etc|
+| Procedures        | `SP_*`        |SP_LISTAR_VENDA_PERIODO   |Procedimentos armazenados que podem ser utilizados de inúmeras formas, tais quais, processamento de dados, relatórios, etc|
 | Trigger  			| `TRU/TRI/TRD_*`|TRU_ITEM_PEDIDO           |Gatilhos adicionados às tabelas para que, após uma determinada ação (Inserção, Atualização ou Exclusão) seja disparada uma segunda ação em uma outra tabela do banco de dados|
 
 
@@ -58,11 +58,11 @@ O sistema é baseado em um modelo relacional estruturado com forte integridade r
 | NUM_*		        | `NUMERIC/ALPHANUMERIC`	|Número   									|NUM_CPF								|
 | FLG_*		        | `NUMERIC`        			|Indica se o valor é verdadeiro ou falso    |FLG_ATIVO								|
 | VAL_*				| `Decimal`        			|Valor       								|VAL_TOTAL_PEDIDO						|
-| DES_*		        | `VARCHAR/TEXT`   			|Descrição  								|DES_COMPLEMENTO   						|
+| DES_*		        | `VARCHAR/TEXT`   			|Descrição  								|SP_LISTAR_VENDA_PERIODO				|
 | DAT_*		        | `DATE/TIMESTAMP`        	|Data  										|DAT_NASCIMENTO/DAT_CRIACAO				|
 | TP_*		        | `TINYINT`		        	|Tipo (Domínio)								|TP_TELEFONE							|
 | SG_*		        | `CHAR`		        	|Sigla 										|SG_UF									|
-| COD_*		        | `VARCHAR/BIGINT/TINYINT`	|Código				 						|COD_UF									|
+| COD_*		        | `VARCHAR/BIGINT/TINYINT``	|Código				 						|COD_UF									|
 
 ##  Padrão de ALIAS utilizados.
 
@@ -81,10 +81,10 @@ Com o objetivo de garantir a governança e a segurança dos dados, foram criadas
 
 | Sensibilidade     | Resumo	     												|				Exemplo                      |
 |-------------------|---------------------------------------------------------------|--------------------------------------------|
-|`NOT_SECURITY_APPLY` | São dados acessíveis ao púbico e que não possuem nenhum tipo de segurança aplicada pelo fato de não possuir restrições legais definidas pela LGPD.        	|			 NAM_CIDADE/NAM_UF			     |
-|`PII`                | São dados que pertencem ao cliente e que são protegidos por lei e ser devidamente tratados para que não estejam  visíveis ao público												|			NUM_CPF/DAT_NASCIMENTO/DES_EMAIL |
-|`STRATEGIC_FIN`      | Dados da companhia que norteam a tomada de decisão financeira e contábil								|			VAL_TOTAL_PEDIDO                 |
-|`STRATEGIC_OPE`	    | Dados da companhia que norteam a tomada de decisão operacional no dia dia       						|			QTD_ITEM_PEDIDO					 |
+|NOT_SECURITY_APPLY | São dados acessíveis ao púbico e que não possuem nenhum tipo de segurança aplicada pelo fato de não possuir restrições legais definidas pela LGPD.        	|			 NAM_CIDADE/NAM_UF			     |
+|PII                | São dados que pertencem ao cliente e que são protegidos por lei e ser devidamente tratados para que não estejam  visíveis ao público												|			NUM_CPF/DAT_NASCIMENTO/DES_EMAIL |
+|STRATEGIC_FIN      | Dados da companhia que norteam a tomada de decisão financeira e contábil								|			VAL_TOTAL_PEDIDO                 |
+|STRATEGIC_OPE	    | Dados da companhia que norteam a tomada de decisão operacional no dia dia       						|			QTD_ITEM_PEDIDO					 |
 
 ---
 
@@ -95,7 +95,7 @@ Com o objetivo de garantir a governança e a segurança dos dados, foram criadas
  /migration
 ````
 
-Os scripts para criação dos objetos do banco de dados podem ser encontrados na pasta [pje/migration](https://github.com/luanbiset/PJE-ComprasOnline/tree/main/pje/migration). Esses scripts estão preparados de forma idempotente, podendo ser reexecutado sem a ocorrencia de erros.
+Os scripts para criação dos objetos do banco de dados podem ser encontrados na pasta [pje/migration](https://github.com/luanbiset/PJE-ComprasOnline/tree/main/pje/migration). Esses scripts estão preparados de forma idempotente, podendo ser reexecutado sem a ocorrência de erros.
 
 ##  Docker Compose
 
@@ -110,11 +110,11 @@ Para realizar a inicialização do banco de dados, deve-se seguir os passos abai
 
 O arquivo [docker-compose-run](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/docker-compose-run.bat) foi criado para que ao ser executado, instancie o banco de dados e aplique os migrations.
 
-##  MER do banco de dados.
+##  MER do banco de dados em 3FN.
 ![MER](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/pje_adm.png)
 
 # Parte 2 - SQL Avançado e Procedimentos Armazenados
-Para esta etapa, foi desenolvido o procedimento [SP_LISTAR_VENDAS_PERIODO](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/pje/migration/V012_0__CREATE_PROC_SP_LISTAR_VENDAS_PERIODO.sql), procedimento este, responsável por retornar os dados:
+Para esta etapa, foi desenvolvido o procedimento [SP_LISTAR_VENDAS_PERIODO](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/pje/migration/V012_0__CREATE_PROC_SP_LISTAR_VENDAS_PERIODO.sql), procedimento este, responsável por retornar os dados:
 - Total de pedidos;
 - Soma do valor total dos pedidos;
 - Valor médio por pedido;
@@ -131,7 +131,6 @@ SELECT @report AS lista_venda_periodo;
 
 # Parte 3 - Otimização de Query.
 Para esta situação, foram realizadas as seguintes modificações:
-- Ajuste da sintaxe das consultas para o padrão ANSI SQL, garantindo a utilização das boas práticas e dos padrões atuais de desenvolvimento.
 - Estabelecidos alguns filtros obrigatórios (Data de inicio/fim, status do pedido e valor mínimo);
 - Estabelecida uma regra para que o período de datas que se deseja selecionar não tenha mais de 90 dias, evitando uma consulta muito custosa no banco de dados que pode acarretar em uso excessivo de recursos;
 - Estabelecida uma paginação mínima para caso o usuário não informe (50 registros por página);
@@ -221,8 +220,7 @@ WHERE nome = 'Vincular boleto'
   AND ativo <> 1;  
 ```
 
-## Conclusão
-- Os scripts são totalmente idempotentes, permitindo atualizar o registro caso o mesmo já exista e caso não exista, será inserido utilizando como base, o nome 'Vincular boleto';
-	- Salientando que, na solução 1, há necessidade de existir uma unique key no campo Nome para que seja disparada uma exceção de duplicate key.
+## Desfecho
+- O script é Totalmente idempotente, permitindo atualizar o registro caso exista unique key para o campo nome e seja disparada uma exceção de duplicate key, permitindo atualizar os valores das demais colunas sem a necessidade de remover e reinserir o registro;
 - Coerente, o script pode ser executado em qualquer ambiente, seja DEV/QA/PROD pelo fato de validar a existencia de um registro com o nome 'Vincular boleto
-- Seguro, garante que não haja divergencia de dados entre os diferentes ambientes DEV/QA/PROD, acarretando na integrade total nos testes integrados das aplicações.
+- Seguro, garante que não haja divergencia de dados entre os diferentes ambientes DEV/QA/PROD, acarretando na integridade total nos testes integrados das aplicações.
