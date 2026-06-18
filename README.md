@@ -135,7 +135,7 @@ Para esta situação, foram realizadas as seguintes modificações:
 - Estabelecida uma regra para que o período de datas que se deseja selecionar não tenha mais de 90 dias, evitando uma consulta muito custosa no banco de dados que pode acarretar em uso excessivo de recursos;
 - Estabelecida uma paginação mínima para caso o usuário não informe (50 registros por página);
 - Estabelecido um status padrão (Concluído) caso o usuário não informe;
-- Foi criado um índice para as colunas IDT_STATUS_PEDIDO, DAT_PEDIDO e VAL_TOTAL_PEDIDO cobrindo a consulta nas clausula where/and.
+- Foi criado um índice para as colunas IDT_STATUS_PEDIDO, DAT_PEDIDO e VAL_TOTAL_PEDIDO contemplando as colunas do filtro nas clausula where/and.
 - Foi implementada uma procedure para encapsular a consulta e suas melhorias no arquivo [SP_LISTAR_POR_VALOR_MINIMO](https://github.com/luanbiset/PJE-ComprasOnline/blob/main/pje/migration/V013_0__CREATE_PROC_SP_LISTAR_POR_VALOR_MINIMO.sql).
 
 ```
