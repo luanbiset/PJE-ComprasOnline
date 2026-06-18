@@ -27,7 +27,7 @@ SET @sql := (
             DAT_CRIACAO TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT ''[NOT_SECURITY_APPLY] - Data de criação da UF.'',
             DAT_ATUALIZACAO TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT ''[NOT_SECURITY_APPLY] - Data de atualização da UF.'',
             IDT_USR_CRIACAO BIGINT NOT NULL COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela criação do registro.'',
-            IDT_IDT_USR_ALTERACAO BIGINT COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela alteração do registro.'',
+            IDT_USR_ALTERACAO BIGINT COMMENT ''[NOT_SECURITY_APPLY] - Usuário responsável pela alteração do registro.'',
             CONSTRAINT UF_PK PRIMARY KEY (IDT_UF),
             CONSTRAINT UF_UK01 UNIQUE (COD_UF),
             CONSTRAINT UF_UK02 UNIQUE (NAM_UF),
