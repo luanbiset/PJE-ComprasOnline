@@ -99,7 +99,7 @@ BEGIN
         -- 10 pedidos por cliente
         SET v_pedido = 0;
 
-        WHILE v_pedido < 10 DO
+        WHILE v_pedido < 50 DO
 
             INSERT INTO TAB_PEDIDO (
                 IDT_CLIENTE,
